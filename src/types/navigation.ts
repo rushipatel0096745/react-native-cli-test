@@ -27,7 +27,13 @@ export type HomeStackParamList = {
     sheetMode?: 'ADD_ASSET' | 'EDIT_ASSET' | 'DEFAULT';
   };
   AssetDetails: { assetId: string };
-  AssetEdit: { assetId: string };
+  AssetEdit: {
+    assetId: string;
+    scannedUID?: string;
+    sheetOpen?: 'scan' | 'nfc';
+    sheetAllowed?: 'scan' | 'nfc';
+    sheetMode?: 'ADD_ASSET' | 'EDIT_ASSET' | 'DEFAULT';
+  };
 };
 
 export type ProfileStackParamList = {

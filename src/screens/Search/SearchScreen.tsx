@@ -1,7 +1,7 @@
 import NFCScanner from '@/components/NFCScanner';
 import QRScanner from '@/components/QRScanner';
 import { HomeStackParamList } from '@/types/navigation';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import {
@@ -23,6 +23,8 @@ type Props = {
   sheetMode?: 'ADD_ASSET' | 'EDIT_ASSET' | 'DEFAULT';
 };
 
+type RouteProps = RouteProp<HomeStackParamList, 'AssetEdit'>;
+
 const SearchSheet = ({
   onClose,
   initialTab,
@@ -42,7 +44,7 @@ const SearchSheet = ({
   ];
 
   function handleSheet(uid: string, resetScanner?: () => void) {
-    if (sheetMode === 'ADD_ASSET' || sheetMode === 'EDIT_ASSET') {
+    if (sheetMode === 'ADD_ASSET') {
       navigation.navigate('Home', {
         screen: 'AssetAdd',
         params: { scannedUID: uid },
@@ -50,8 +52,16 @@ const SearchSheet = ({
       resetScanner?.();
       onClose?.();
     }
+    if (sheetMode === 'EDIT_ASSET') {
+      navigation.navigate('Home', {
+        screen: 'AssetEdit',
+        params: { scannedUID: uid },
+      });
+      resetScanner?.();
+      onClose?.();
+    }
   }
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.handle} />

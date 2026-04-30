@@ -7,6 +7,7 @@ import {
 } from 'react-native-vision-camera';
 import { useBarcodeScannerOutput } from 'react-native-vision-camera-barcode-scanner';
 import type { Barcode } from 'react-native-vision-camera-barcode-scanner';
+import { useIsFocused } from '@react-navigation/native';
 
 type Props = { onScan: (uid: string, resetScanner: () => void) => void };
 
@@ -17,6 +18,7 @@ export default function QRScanner({ onScan }: Props) {
 
   const [scanned, setScanned] = useState(false);
   const [flashOn, setFlashOn] = useState(false);
+  const isFocused = useIsFocused();
 
   const hasFlash = device?.hasFlash ?? false;
   const { hasPermission, requestPermission } = useCameraPermission();
@@ -78,7 +80,7 @@ export default function QRScanner({ onScan }: Props) {
         <Camera
           style={StyleSheet.absoluteFill}
           device={device}
-          isActive={!scanned}
+          isActive={!scanned && isFocused}
           torchMode={flashOn && hasFlash ? 'on' : 'off'}
           outputs={[scannerOutput]}
         />

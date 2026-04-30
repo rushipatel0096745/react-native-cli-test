@@ -1,17 +1,4 @@
-// import { View, Text } from 'react-native'
-// import React from 'react'
-
-// const SignUpScreen = () => {
-//   return (
-//     <View>
-//       <Text>SignUpScreen</Text>
-//     </View>
-//   )
-// }
-
-// export default SignUpScreen
-
-// src/screens/SignupScreen.js
+// src/screens/LoginScreen.js
 
 import React, { useState } from "react";
 import {
@@ -25,60 +12,36 @@ import {
 } from "react-native";
 import { useAuth } from "@/context/AuthContext";
 
-export default function SignupScreen({ navigation }: any) {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+export default function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { signup } = useAuth();
+  const { login } = useAuth();
 
-  const handleSignup = async () => {
-    if (!firstName || !email || !password) {
-      Alert.alert("Error", "Please fill in all required fields");
-      return;
-    }
-
-    if (password.length < 8) {
-      Alert.alert("Error", "Password must be at least 8 characters");
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert("Error", "Please fill in all fields");
       return;
     }
 
     setLoading(true);
-    const result = await signup(email, password, firstName, lastName);
+    const result = await login(email, password);
     setLoading(false);
 
-    if (result.needsVerification) {
-      Alert.alert("Verify Email", result.error);
-      navigation.navigate("Login");
-    } else if (!result.success) {
-      Alert.alert("Signup Failed", result.error);
+    if (!result.success) {
+      Alert.alert("Login Failed", result.error);
     }
     // If success, AuthContext updates user → navigator auto-redirects
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Create Account</Text>
+      <Text style={styles.title}>Welcome Back</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="First Name *"
-        value={firstName}
-        onChangeText={setFirstName}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Last Name"
-        value={lastName}
-        onChangeText={setLastName}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Email *"
+        placeholder="Email"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -87,7 +50,7 @@ export default function SignupScreen({ navigation }: any) {
 
       <TextInput
         style={styles.input}
-        placeholder="Password * (min 8 chars)"
+        placeholder="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -95,18 +58,18 @@ export default function SignupScreen({ navigation }: any) {
 
       <TouchableOpacity
         style={styles.btn}
-        onPress={handleSignup}
+        onPress={handleLogin}
         disabled={loading}
       >
         {loading ? (
           <ActivityIndicator color="#fff" />
         ) : (
-          <Text style={styles.btnText}>Sign Up</Text>
+          <Text style={styles.btnText}>Login</Text>
         )}
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-        <Text style={styles.link}>Already have an account? Login</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+        <Text style={styles.link}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
     </View>
   );
